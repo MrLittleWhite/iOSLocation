@@ -42,6 +42,7 @@
 
 - (void)startOnceLocation
 {
+    [self checkAuthorizationStatus];
     [self.locationManager requestLocation];
 }
 
@@ -131,8 +132,11 @@
             [self callBackIsAuthorized:NO];
             break;
         }
+        case kCLAuthorizationStatusAuthorizedWhenInUse: {
+            [self.locationManager requestAlwaysAuthorization];
+            break;
+        }
         case kCLAuthorizationStatusAuthorizedAlways:
-        case kCLAuthorizationStatusAuthorizedWhenInUse:
         {
             [self callBackIsAuthorized:YES];
             break;

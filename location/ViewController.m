@@ -10,6 +10,7 @@
 #import "CoreBluetoothManager.h"
 #import "LocationManager.h"
 #import "GlobalToast.h"
+#import "AppDelegate.h"
 
 @interface ViewController () <LocationDelegate>
 
@@ -30,20 +31,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+//    _coordinate = CLLocationCoordinate2DMake(22.602165225216989, 114.00532007217407);
     _region = [CoreBluetoothManager defaultRegion];
     _locationManager = [LocationManager locationManagerWithDelegate:self];
     _coreBluetoothManager = [[CoreBluetoothManager alloc] init];
     [_locationManager startOnceLocation];
     [_locationManager startMonitoringVisits];
     [_locationManager startUpdatingHeading];
+    
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSString *text = [NSString stringWithFormat:@"app launch %@", @(!delegate.isLaunched)];
+    UILabel *label = [[UILabel alloc] init];
+    [self.view addSubview:label];
+    label.text = text;
+    label.frame = CGRectMake(80, 280, 200, 50);
 }
+
 - (IBAction)updating:(id)sender {
     [_locationManager startUpdatingLocation];
 }
 
 - (IBAction)region:(id)sender {
-    [_locationManager startMonitoringForRegion:_coordinate radius:1];
+    [_locationManager startMonitoringForRegion:_coordinate radius:150];
 }
 
 - (IBAction)startBeacon:(id)sender {
